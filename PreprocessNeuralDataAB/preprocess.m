@@ -23,7 +23,7 @@
 % params.endOffset = 0;
 
 
-function spikes = preprocess(params)
+function dat = preprocess(params)
 
 fname = sprintf('%s/%s',params.dat_folder,params.input_file);
 load(fname);
@@ -35,5 +35,9 @@ elseif exist('processedData','var') % Kristin's Processed data
 end
 
 selected_sorts = selectsorts(data,params);
-spikes = getspikes(data,params,selected_sorts);
-spikes = prunebyfiringrate(spikes,params);    
+dat = getspikes(data,params,selected_sorts);
+dat = prunebyfiringrate(dat,params);  
+
+fname = sprintf('%s/%s',params.dat_folder,params.output_file);
+save(fname,'dat');
+

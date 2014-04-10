@@ -1,34 +1,19 @@
-function spikes = getspikes(data,params,selected_sorts)
+function dat = getspikes(data,params,selected_sorts)
 
 % Inputs: 
 %
 % Outputs: 
-%   spikes : cell array of length #oftargets
+%   dat
 
-if params.splitTargets
-    num_targets = params.num_targets;
-else
-    num_targets = 1;
-end
-spikes = cell(1,num_targets);      
-for i = 1:num_targets
-    spikes{i}.dat = struct;
-end
-
+dat(length(data))= struct;
+index = 1;
 for num_trial = 1:length(data)
     fprintf('Processing trial %d of %d\n',num_trial,length(data));
     trial = data(num_trial);
     trialId = trial.Overview.trialNumber;
-    if params.splitTargets
-        % find target index
-        target_xyz = trial.Parameters.MarkerTargets(3).window(1:3);
-        [~,target_index] = ismember(target_xyz,params.targets,'rows');
-    else
-        target_index = 1;
-    end
+    target_xyz = trial.Parameters.MarkerTargets(3).window(1:3);
     TrialData = trial.TrialData;
-
-    
+   
     % Skip trials without a market movement onset or end
     if ~isfield(TrialData,params.startMarker) || ~isfield(TrialData,params.endMarker)
         continue
@@ -52,11 +37,16 @@ for num_trial = 1:length(data)
         timestamps_selected = timestamps_selected - timeStart+1; % align to timeStart
         spiketimes(i,timestamps_selected) = 1;
     end
-        
-    spikes{target_index}.dat(end+1).spikes = spiketimes;
-    spikes{target_index}.dat(end).trialId = trialId;
+    
+    dat(index).trialId = trialId;
+    dat(index).spikes = spiketimes;
+    dat(index).target = target_xyz;
+    index = index+1;        
 end
 
-for i = 1:num_targets
-    spikes{i}.dat(1) = [];
+% Remove blank trials
+for i = 1:length(dat)
+    if isempty(dat(i).spikes)
+        dat(i) = [];
+    end
 end

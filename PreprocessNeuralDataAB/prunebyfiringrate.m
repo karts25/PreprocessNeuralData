@@ -1,11 +1,8 @@
-function spikes = prunebyfiringrate(spikes,params)
+function dat = prunebyfiringrate(dat,params)
 
-yAll = [];
+yAll = dat.spikes;
 binwidth = 1000;
 
-for i = 1:length(spikes)
-    yAll = [yAll spikes{i}.dat.spikes];
-end
 
 num_intervals = floor(size(yAll,2)/binwidth);
 num_neurons = size(yAll,1);
@@ -20,10 +17,8 @@ for t = 1:num_intervals
     interval = (t-1)*binwidth+1:t*binwidth;
     spikecounts_interval(:,t) = sum(yAll(:,interval),2);
 end
-inactive_neurons = mean(spikecounts_interval,2) < 1;
+inactive_neurons = mean(spikecounts_interval,2) < params.minFiringRate;
 
-for i = 1:length(spikes)
-    for j = 1:length(spikes{i}.dat)
-        spikes{i}.dat(j).spikes(inactive_neurons,:) = [];
-    end
+for j = 1:length(dat)
+    dat(j).spikes(inactive_neurons,:) = [];
 end
