@@ -23,7 +23,7 @@
 % params.endOffset = 0;
 
 
-function dat = preprocess(params)
+function preprocess(params)
 
 fname = sprintf('%s/%s',params.dat_folder,params.input_file);
 load(fname);
@@ -38,6 +38,10 @@ selected_sorts = selectsorts(data,params);
 dat = getspikes(data,params,selected_sorts);
 dat = prunebyfiringrate(dat,params);  
 
-fname = sprintf('%s/%s',params.dat_folder,params.output_file);
-save(fname,'dat');
+if params.splitTargets
+    splitTargets(dat,params)
+else
+    fname = sprintf('%s/%s',params.dat_folder,params.output_file);
+    save(fname,'dat');
+end
 

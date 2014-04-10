@@ -5,7 +5,8 @@ params.dat_folder      = '/Users/karthikl/Desktop/Research_Material/Neuraldata';
 params.input_file      = 'Ike/Cleaner Data/Ike20131215outcenter_UDP_processed';
 params.output_file     = 'Ike/Cleaner Data/Ike20131215outcenter_gpfa';
 params.output_format   = 'gpfa';
-params.splitTargets    = false;
+params.splitTargets    = true;
+params.numTargets      = 8;
 
 params.checkSortquality     = false;
 params.lowestSortquality    = NaN;
@@ -18,4 +19,4 @@ params.startOffset = 0;
 params.endMarker = 'timeTargetAcquired';
 params.endOffset = 0;
 
-dat = preprocess(params);
+preprocess(params);
