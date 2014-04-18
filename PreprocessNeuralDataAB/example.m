@@ -6,7 +6,6 @@ params.input_file      = 'Ike/Cleaner Data/Ike20131215outcenter_UDP_processed';
 params.output_file     = 'Ike/Cleaner Data/Ike20131215outcenter_gpfa';
 params.output_format   = 'gpfa';
 params.splitTargets    = true;
-params.numTargets      = 8;
 
 params.checkSortquality     = false;
 params.lowestSortquality    = NaN;
@@ -19,4 +18,7 @@ params.startOffset = 0;
 params.endMarker = 'timeTargetAcquired';
 params.endOffset = 0;
 
-preprocess(params);
+%preprocess(params);
+
+params.input_file = params.output_file;
+plot_tuning_curve(params);
